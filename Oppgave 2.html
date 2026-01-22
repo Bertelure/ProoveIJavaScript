@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- saved from url=(0123)http://127.0.0.1:3002/c:/Users/Vetle.ITK/Downloads/Oppgave%201-mal.html?serverWindowId=309a5478-e60a-459e-ba22-2ccd591ce9b0 -->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" src="./Oppgave 1_files/___vscode_livepreview_injected_script"></script><style type="text/css"></style>
+        <title>Oppgave 2</title>
+		
+		<script>	
+
+		</script>		
+    </head>
+
+    <body>
+        <h1>
+            Fartskontroll
+        </h1>
+        <p>
+            Oppgi fart: 
+            <input type="number" id="fartInput"> 
+            km/time
+        </p>
+        <button id="registrerFart">
+            Registrer
+        </button>
+        <p>
+            Melding: 
+            <input id="herErMelding"> 
+            Avvik: 
+            <input type="number" id="grenseAvvik"> 
+            km/time 
+        </p>
+        <p>
+            <button id="visStatistikk">
+                Vis statistikk
+            </button> 
+            <p id="statistikk">
+
+            </p> 
+
+        </p>
+        <button id="nullstill" >Nullstill</button>
+    
+        <script>
+    const registrerFart = document.getElementById("registrerFart");
+    const nullstill = document.getElementById("nullstill");
+    const herErMelding = document.getElementById("herErMelding");
+    const fartInput = document.getElementById("fartInput");
+    const visStatistikk = document.getElementById("visStatistikk");
+    const fartHistorikk = [];
+
+    registrerFart.onclick = function () {
+        let fart1 = Number(fartInput.value);
+        fartHistorikk.push(fart1);
+
+        if (fart1 <= 80) {
+            herErMelding.value = "lovlig fart";
+        } 
+        else if (fart1 <= 90) {
+            herErMelding.value = "1500kr i bot";
+        }
+        else {
+            herErMelding.value = "3000kr i bot";
+        }
+
+        let avvik = Math.abs(fart1 - 80);
+        document.getElementById("grenseAvvik").value = avvik;
+    };
+
+    visStatistikk.onclick = function () {
+    let sum = 0;
+    let antallBiler = fartHistorikk.length;
+    let bruttGrense = 0;
+    let samletBot = 0;
+
+    for (let i = 0; i < fartHistorikk.length; i++) {
+        let fart = fartHistorikk[i];
+        sum += fart;
+
+        if (fart > 80) {
+            bruttGrense++;
+
+            if (fart <= 90) {
+                samletBot += 1500;
+            } else {
+                samletBot += 3000;
+            }
+        }
+    }
+
+    let gjennomsnitt = sum / antallBiler;
+    document.getElementById("statistikk").innerHTML =
+        "Antall målte biler: " + antallBiler + "<br>" +
+        "Gjennomsnittsfart: " + gjennomsnitt.toFixed(1) + " km/t<br>" +
+        "Antall som har brutt fartsgrensen: " + bruttGrense + "<br>" +
+        "Samlet bot for alle bilene: " + samletBot + " kr";  
+    };
+
+        
+        nullstill.onclick = function () {
+            herErMelding.value = "";
+            document.getElementById("grenseAvvik").value = "";
+            fartHistorikk.length = 0;
+            fartInput.value = "";
+    };
+</script>
+
+    
+</body>
+</html>
